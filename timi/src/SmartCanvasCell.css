@@ -1,0 +1,73 @@
+/* SmartCanvasCell.css */
+
+/* Define the core "Norse Industrial" color palette */
+:root {
+  --base-slate: #1A1C1E;
+  --off-white: #F4F4F9;
+  --accent-blue: #3E5C76;
+  --accent-amber: #D97706;
+}
+
+/* The main container for the WYSIWYG cell */
+.canvasCell {
+  width: 300px; /* Example width */
+  height: 200px; /* Example height */
+  background-color: var(--base-slate);
+  color: var(--off-white);
+  font-family: 'Inter', sans-serif; /* Using Inter as the primary font */
+  border: 1px solid var(--accent-blue);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Smart Overlay Mode: The image serves as a background */
+.smartOverlay {
+  background-size: cover;
+  background-position: center;
+}
+
+/* The content container for the overlay text */
+.overlayContent {
+  position: relative; /* Sits on top of the pseudo-element */
+  z-index: 2;
+  padding: 1rem;
+  text-align: center;
+  /* Add a subtle text shadow for legibility, as an alternative to the backdrop-filter */
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* The pseudo-element creates the blurred background effect.
+   This is more robust than backdrop-filter for cross-browser compatibility. */
+.smartOverlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  background-attachment: fixed; /* Fixes background image jitter */
+  z-index: 1;
+  filter: blur(4px) brightness(0.6); /* Apply blur and darken the background image */
+  transform: scale(1.1); /* Prevents blurred edges from showing */
+}
+
+.eventTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--off-white);
+}
+
+.eventDate {
+  font-size: 1rem;
+  color: var(--off-white);
+  opacity: 0.9;
+}
+
+/* Example of an interactive element style */
+.eventTitle:hover {
+    color: var(--accent-amber);
+}
