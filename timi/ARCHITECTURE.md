@@ -36,47 +36,44 @@ my-calendar.lca (A standard ZIP archive)
 
 ## 2. Database Schema
 
-The Tími database is a relational SQLite database composed of 7 tables: 2 for system metadata, 3 for domain data, and 2 for core application logic.
+The Tími database is a relational SQLite database composed of 12 tables: 2 for system metadata, 5 for domain data, and 5 for core application logic.
 
 ### Rationale for Integer IDs
 
 The primary key for events (`EVNT.EVNT_ID`) is an `INTEGER`. While UUIDs are common in distributed systems, Tími's local-first nature makes sequential integers a simpler and more performant choice. This design assumes a single-user context where the likelihood of merging two distinct archives is a secondary concern to core application performance and simplicity.
 
+### Application Logic
+
+#### 5-Tier Styling Priority
+When rendering an event, the application applies styling rules in a specific, descending order of priority. The first rule found is the one that is applied.
+1.  **Daily Rule (`DSPLY_RL`):** The most specific override for a single event on a single day.
+2.  **Group-Event Link Rule (`X_GRP_EVNT`):** A style applied to a specific event only when it appears as part of a specific group.
+3.  **Group Rule (`GRP`):** A style applied to all events within a group.
+4.  **Category Rule (`DM_EVNT_CTGRY`):** The event's default, intrinsic style (e.g., all "Birthdays" are italics).
+5.  **App Default:** A fallback style if no other rules are defined.
+
+#### Multi-Level Sorting Logic
+When displaying events for a given day, they are sorted by three criteria in order:
+1.  **Primary Sort:** By the `SRT_ORDR_NUM` of the Group (`GRP`).
+2.  **Secondary Sort:** By the `SRT_ORDR_NUM` on the Event-Group link (`X_GRP_EVNT`).
+3.  **Tertiary Sort:** By the event's start time (`EVNT.STR_DT`).
+
 ### Schema Diagram (Conceptual)
 
 ```mermaid
 erDiagram
-    SYS_TABLES {
+    GRP {
         INTEGER ID PK
-        TEXT TBL_NM
-        TEXT DSPLY_NM
-        TEXT TBL_DSC
-    }
-    SYS_COLUMNS {
-        INTEGER ID PK
-        INTEGER TBL_ID FK
-        TEXT DATA_TYP
-        INTEGER IS_NLLBL
-        TEXT COL_NM
-        TEXT DSPLY_NM
-        TEXT COL_DSC
-    }
-    DM_RFC_5545_RCRRNC_RL {
-        INTEGER ID PK
-        TEXT NM
-        TEXT RL_TXT
-    }
-    DM_DSPLY_CNFG {
-        INTEGER ID PK
-        TEXT NM
-        TEXT CNFG_JSON
-    }
-    DM_IMG {
-        INTEGER ID PK
-        TEXT FL_NM
+        TEXT NM UNIQUE
+        TEXT DSC
+        INTEGER SRT_ORDR_NUM
+        INTEGER DSPLY_CNFG_ID FK
+        INTEGER DFLT_PRINT_CNFG_ID FK
+        INTEGER DFLT_ICS_CNFG_ID FK
     }
     EVNT {
         INTEGER EVNT_ID PK
+        INTEGER EVNT_CTGRY_ID FK
         INTEGER RFC_5545_RCRRNC_RL_ID FK
         TEXT STR_DT
         TEXT END_DT
@@ -84,22 +81,55 @@ erDiagram
         TEXT EVNT_DSC
         TEXT LGCY_RFRNC_TXT
     }
+    DM_EVNT_CTGRY {
+        INTEGER ID PK
+        TEXT NM UNIQUE
+        INTEGER DSPLY_CNFG_ID FK
+    }
+    X_GRP_EVNT {
+        INTEGER ID PK
+        INTEGER GRP_ID FK
+        INTEGER EVNT_ID FK
+        INTEGER SRT_ORDR_NUM
+        INTEGER DSPLY_CNFG_ID FK
+    }
+    X_GRP_GRP {
+        INTEGER ID PK
+        INTEGER PRNT_GRP_ID FK
+        INTEGER GRP_ID FK
+        INTEGER SRT_ORDR_NUM
+        INTEGER DSPLY_CNFG_ID FK
+    }
+    OTPT_CNFG {
+        INTEGER ID PK
+        TEXT NM UNIQUE
+        TEXT TRGT_TYP
+        TEXT CNFG_JSON
+    }
     DSPLY_RL {
         INTEGER ID PK
         INTEGER EVNT_ID FK
-        INTEGER RL_PRRTY_NUM
         INTEGER DSPLY_CNFG_ID FK
-        INTEGER DSPLY_IMG_ID FK
-        INTEGER RFC_5545_RCRRNC_RL_ID FK
-        TEXT MTCH_CNFG_TXT
+    }
+    DM_DSPLY_CNFG {
+        INTEGER ID PK
+        TEXT NM
+        TEXT CNFG_JSON
     }
 
-    SYS_TABLES ||--o{ SYS_COLUMNS : contains
-    EVNT ||--|{ DSPLY_RL : "has display rules"
-    DM_RFC_5545_RCRRNC_RL ||--o{ EVNT : "defines recurrence"
-    DM_RFC_5545_RCRRNC_RL ||--o{ DSPLY_RL : "defines recurrence"
-    DM_DSPLY_CNFG ||--o{ DSPLY_RL : "defines style"
-    DM_IMG ||--o{ DSPLY_RL : "provides image"
+    GRP ||--|{ X_GRP_EVNT : "contains event"
+    GRP ||--o{ X_GRP_GRP : "is parent of"
+    GRP }|--o{ X_GRP_GRP : "is child of"
+    GRP ||--o{ OTPT_CNFG : "has default print config"
+    GRP ||--o{ OTPT_CNFG : "has default ics config"
+    EVNT ||--|{ X_GRP_EVNT : "is in group"
+    EVNT ||--|{ DSPLY_RL : "has display rule"
+    DM_EVNT_CTGRY ||--o{ EVNT : "categorizes"
+    DM_DSPLY_CNFG ||--o{ DM_EVNT_CTGRY : "defines style for"
+    DM_DSPLY_CNFG ||--o{ GRP : "defines style for"
+    DM_DSPLY_CNFG ||--o{ X_GRP_EVNT : "defines style for"
+    DM_DSPLY_CNFG ||--o{ X_GRP_GRP : "defines style for"
+    DM_DSPLY_CNFG ||--o{ DSPLY_RL : "defines style for"
 ```
 
 ### Table Definitions
