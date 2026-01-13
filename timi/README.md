@@ -37,6 +37,14 @@ Unlike cloud-based calendars that harvest your data, Tími operates on a simple,
 
 ---
 
+### Deployment
+
+Tími is a Single Page Application (SPA). When deploying to a static hosting provider like Cloudflare Pages, Netlify, or Vercel, you must configure a redirect rule to ensure client-side routing works correctly.
+
+This project includes a `public/_redirects` file configured for Cloudflare Pages. This file instructs the host to serve the `index.html` for any path that does not match a static file, allowing the React router to take over.
+
+---
+
 ### Contributing
 
 Tími is a free and open-source software project. We welcome contributions from the community. Please see `ARCHITECTURE.md` for a detailed technical overview.
