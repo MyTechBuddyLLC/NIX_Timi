@@ -1,0 +1,114 @@
+/* src/AppLayout.css */
+
+/* Use the same color palette defined in SmartCanvasCell.css */
+:root {
+  --base-slate: #1A1C1E;
+  --off-white: #F4F4F9;
+  --accent-blue: #3E5C76;
+  --accent-amber: #D97706;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--base-slate);
+  color: var(--off-white);
+}
+
+.appLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  overflow-y: auto; /* Allow content to scroll if needed */
+}
+
+.mainContent {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+/* Mobile-First: Bottom Navigation Bar */
+.bottomNav {
+  display: flex;
+  justify-content: space-around;
+  background-color: var(--accent-blue);
+  padding: 0.5rem 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.navItem {
+  color: var(--off-white);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.navItem:hover, .navItem.active {
+  background-color: var(--base-slate);
+  color: var(--accent-amber);
+}
+
+/* Hide the sidebar on mobile */
+.sidebar {
+  display: none;
+}
+
+/* Desktop Styles: Media query for larger screens */
+@media (min-width: 768px) {
+  .appLayout {
+    flex-direction: row;
+  }
+
+  /* Hide the bottom nav on desktop */
+  .bottomNav {
+    display: none;
+  }
+
+  /* Show the sidebar on desktop */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    background-color: var(--accent-blue);
+    padding: 1rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar .navItem {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Styles for the Update Notification */
+.updateNotification {
+  background-color: var(--accent-amber);
+  color: var(--base-slate);
+  text-align: center;
+  padding: 0.75rem;
+  font-weight: 500;
+}
+
+.updateNotification button {
+  margin-left: 1rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--base-slate);
+  background-color: transparent;
+  color: var(--base-slate);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.updateNotification button:hover {
+  background-color: var(--base-slate);
+  color: var(--accent-amber);
+}

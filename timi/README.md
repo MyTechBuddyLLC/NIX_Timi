@@ -18,11 +18,11 @@ Unlike cloud-based calendars that harvest your data, Tími operates on a simple,
 
 ### Features (MVP)
 
-*   **Portable `.lca` Archive:** A single, encrypted file (`.lca`) that contains your entire calendar. Move it, back it up, or share it as you see fit.
-*   **Robust SQLite Backend:** All data is stored in a structured, well-documented SQLite database.
-*   **"Norse Industrial" Aesthetic:** A clean, functional, and rugged UI designed for clarity and focus.
-*   **WYSIWYG Display:** What you see on screen is what you get when you print.
-*   **Flexible Display Rules:** Control the appearance of events based on specific dates or complex recurrence rules.
+*   **Portable `.lca` Archive:** A formal binary file format with a 64-byte header for metadata and an encrypted ZIP archive for data.
+*   **Hardened Security:** Implements Argon2id for key derivation with configurable parameters, ensuring robust protection for your data.
+*   **Mobile-First Responsive UI:** A clean and functional interface that works seamlessly on both mobile (bottom navigation) and desktop (sidebar) screens.
+*   **Automatic Update Notifications:** The app will automatically check for new versions and notify you to refresh for the latest security updates and features.
+*   **Flexible Display Rules & Grouping:** A sophisticated 12-table database schema allows for complex event grouping, nested groups, and a powerful 5-tier styling system.
 
 ---
 
@@ -39,9 +39,16 @@ Unlike cloud-based calendars that harvest your data, Tími operates on a simple,
 
 ### Deployment
 
-Tími is a Single Page Application (SPA). When deploying to a static hosting provider like Cloudflare Pages, Netlify, or Vercel, you must configure a redirect rule to ensure client-side routing works correctly.
+Tími is a Vite-based Single Page Application (SPA) located within the `/timi` subdirectory of this repository.
 
-This project includes a `public/_redirects` file configured for Cloudflare Pages. This file instructs the host to serve the `index.html` for any path that does not match a static file, allowing the React router to take over.
+#### Cloudflare Pages
+
+1.  In your Cloudflare dashboard, go to **Settings > Builds & deployments**.
+2.  Set the **Root directory** to `timi`.
+3.  Set the **Build command** to `npm run build`.
+4.  Set the **Build output directory** to `dist`.
+
+A `public/_redirects` file is included in the project, which correctly handles SPA routing for Cloudflare Pages.
 
 ---
 
