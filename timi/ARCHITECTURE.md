@@ -6,31 +6,60 @@ This document provides a detailed technical overview of the Tími application ar
 
 ## 1. The `.lca` (Local Calendar Archive) Format
 
-The core of Tími's local-first philosophy is the `.lca` file. It is a standard ZIP archive with a proprietary extension to associate it with the Tími application.
+The core of Tími's local-first philosophy is the `.lca` file. It is a custom binary file format composed of a 64-byte header followed by an encrypted ZIP archive.
 
-### Structure
+### Structure: `<Header> + <Encrypted ZIP Data>`
 
-An `.lca` file has a simple and transparent structure:
+*   **Ratatoskr Header (64 bytes):** A fixed-size binary header that provides metadata about the file.
+*   **Encrypted ZIP Data:** The remainder of the file is a standard ZIP archive that has been encrypted.
+
+### The 'Ratatoskr' Binary Header (64-byte)
+
+The header provides essential metadata for decryption and identification.
+
+| Offset (Bytes) | Size | Field | Description |
+| :--- | :--- | :--- | :--- |
+| `0-11` | 12 | Magic String | `RATATOSKR_01` to identify the file type. |
+| `12-27` | 16 | File UUID | A unique identifier for the file. |
+| `28` | 1 | Cipher Flag | `0` for AES-GCM, `1` for ChaCha20-Poly1305. |
+| `29-32` | 4 | Argon2id `memCost`| The memory cost parameter for key derivation. |
+| `33-36` | 4 | Argon2id `iterations`| The iteration count for key derivation. |
+| `37` | 1 | Argon2id `parallelism`| The parallelism factor for key derivation. |
+| `38-63` | 26 | Reserved | Reserved for future use. |
+
+
+### The Encrypted ZIP Archive
+
+The archive contains the user's data in a structured format:
 
 ```
-my-calendar.lca (A standard ZIP archive)
+(Encrypted ZIP Archive)
 |
 +-- /timi.db
 |
 +-- /assets/
     |
     +-- image1.jpg
-    +-- event-icon.png
 ```
 
-*   **/timi.db:** This is the primary database file. It is a standard SQLite 3 database containing all calendar data. Before being added to the archive, this file is encrypted.
-*   **/assets/:** A directory containing all binary assets, such as images, associated with calendar events. These files are stored directly without additional encryption, as the entire archive is protected.
+*   **/timi.db:** The SQLite database, which is itself encrypted with a salt and nonce before being placed in the zip.
+*   **/assets/:** A directory for all binary assets (images, etc.).
 
-### Encryption
+### Encryption & Key Derivation
 
-*   **Algorithm:** The `/timi.db` file is encrypted using the **ChaCha20-Poly1305** stream cipher, a modern, secure, and open-source algorithm.
-*   **Key Derivation:** The encryption key is derived from the user's passphrase using the **Argon2id** algorithm, a strong, memory-hard key derivation function that is highly resistant to brute-force attacks.
-*   **Implementation:** All cryptographic operations are handled by the `libsodium-wrappers` library, a WebAssembly-powered and highly respected implementation of the libsodium library.
+*   **Algorithm:** The archive is encrypted using the **ChaCha20-Poly1305** stream cipher, as indicated by the header flag.
+*   **Hardened Key Derivation:** The master encryption key is derived from the user's passphrase using **Argon2id** with the parameters specified in the file header. This ensures the key can be recreated on any device.
+*   **Implementation:** All cryptographic operations are handled by the `libsodium-wrappers` library.
+
+---
+## 2. Generic Sync Logic
+
+To prepare for future cross-device synchronization, Tími includes a `SyncService` designed to produce encrypted configuration objects. This logic is platform-agnostic.
+
+*   **`RATATOSKR_MASTER_CONFIG`:** An encrypted JSON object containing a list of all known `.lca` file UUIDs and their names.
+*   **`RATATOSKR_[UUID]`:** A separate encrypted JSON object for each file, intended to hold file-specific sync metadata (e.g., last modified timestamp).
+
+These objects are encrypted with the same Argon2id-derived master key, making them safe for storage in a generic key-value store like `chrome.storage.sync` or a private server.
 
 ---
 

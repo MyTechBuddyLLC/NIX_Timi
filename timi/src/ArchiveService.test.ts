@@ -29,7 +29,7 @@ describe('ArchiveService Round-trip Test', () => {
     // 1. Encrypt and Archive
     const lcaArchive = await archiveService.encryptAndArchive(originalDbContents, passphrase);
     expect(lcaArchive).toBeInstanceOf(Uint8Array);
-    expect(lcaArchive.length).toBeGreaterThan(0);
+    expect(lcaArchive.length).toBeGreaterThan(originalDbContents.length);
 
     // 2. Decrypt and Open
     const decryptedDbContents = await archiveService.decryptAndOpen(lcaArchive.buffer, passphrase);
