@@ -11,7 +11,7 @@ describe('ArchiveService Round-trip Test', () => {
   let originalDbContents: Uint8Array | null;
 
   beforeAll(async () => {
-    const locateFile = (file: string) => path.join(__dirname, '..', 'node_modules', 'sql.js', 'dist', file);
+    const locateFile = (file: string): string => path.join(__dirname, '..', 'node_modules', 'sql.js', 'dist', file);
     storageManager = new StorageManager();
     await storageManager.initializeDB(locateFile);
     archiveService = new ArchiveService();
@@ -32,7 +32,7 @@ describe('ArchiveService Round-trip Test', () => {
     expect(lcaArchive.length).toBeGreaterThan(originalDbContents.length);
 
     // 2. Decrypt and Open
-    const decryptedDbContents = await archiveService.decryptAndOpen(lcaArchive.buffer, passphrase);
+    const decryptedDbContents = await archiveService.decryptAndOpen(new Uint8Array(lcaArchive).buffer, passphrase);
     expect(decryptedDbContents).toBeInstanceOf(Uint8Array);
 
     // 3. Verify Integrity
@@ -60,7 +60,7 @@ describe('ArchiveService Round-trip Test', () => {
 
     // Attempt to decrypt with the wrong passphrase and expect it to fail
     await expect(
-      archiveService.decryptAndOpen(lcaArchive.buffer, wrongPassphrase)
+      archiveService.decryptAndOpen(new Uint8Array(lcaArchive).buffer, wrongPassphrase)
     ).rejects.toThrow();
   });
 });

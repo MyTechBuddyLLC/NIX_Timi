@@ -1,4 +1,27 @@
-import initSqlJs, { type LocateFile } from 'sql.js';
+import initSqlJs, { type SqlJsStatic, type Database } from 'sql.js';
+
+type LocateFile = (file: string) => string;
+
+interface ColumnMetadata {
+    name: string;
+    displayName: string;
+    description: string;
+    type: string;
+    isNullable: 0 | 1;
+}
+
+interface DefaultEntry {
+    [key: string]: string | number;
+}
+
+interface TableMetadata {
+    id: number;
+    name: string;
+    displayName: string;
+    description: string;
+    columns: readonly ColumnMetadata[];
+    defaultEntries?: readonly DefaultEntry[];
+}
 
 // Define the database schema as a series of SQL statements
 const SCHEMA = `
@@ -130,7 +153,7 @@ const METADATA_SYS_TABLES = {
     { name: 'DSPLY_NM', displayName: 'Display Name', description: 'The human-readable name for the table.', type: 'TEXT', isNullable: 0 },
     { name: 'TBL_DSC', displayName: 'Table Description', description: 'A description of the table\'s purpose.', type: 'TEXT', isNullable: 0 },
   ],
-};
+} as const;
 
 const METADATA_SYS_COLUMNS = {
     id: 2,
@@ -146,7 +169,7 @@ const METADATA_SYS_COLUMNS = {
         { name: 'DSPLY_NM', displayName: 'Display Name', description: 'The human-readable name for the column.', type: 'TEXT', isNullable: 0 },
         { name: 'COL_DSC', displayName: 'Column Description', description: 'A description of the column\'s purpose.', type: 'TEXT', isNullable: 0 },
     ],
-};
+} as const;
 
 const METADATA_DM_RFC_5545_RCRRNC_RL = {
     id: 3,
@@ -158,7 +181,7 @@ const METADATA_DM_RFC_5545_RCRRNC_RL = {
         { name: 'NM', displayName: 'Name', description: 'Name of the rule (e.g., "None (Single Event)").', type: 'TEXT', isNullable: 0 },
         { name: 'RL_TXT', displayName: 'Rule Text', description: 'The RFC 5545 string. NULL for the "None" entry.', type: 'TEXT', isNullable: 1 },
     ],
-};
+} as const;
 
 const METADATA_DM_DSPLY_CNFG = {
     id: 4,
@@ -174,7 +197,7 @@ const METADATA_DM_DSPLY_CNFG = {
     defaultEntries: [
         { ID: 1, NM: 'No Styling', CNFG_JSON: '{}' },
     ],
-};
+} as const;
 
 const METADATA_DM_IMG = {
     id: 5,
@@ -185,7 +208,7 @@ const METADATA_DM_IMG = {
         { name: 'ID', displayName: 'ID', description: 'Primary key.', type: 'INTEGER', isNullable: 0 },
         { name: 'FL_NM', displayName: 'File Name', description: 'Filename in /assets/.', type: 'TEXT', isNullable: 0 },
     ],
-};
+} as const;
 
 const METADATA_EVNT = {
     id: 6,
@@ -202,7 +225,7 @@ const METADATA_EVNT = {
         { name: 'EVNT_DSC', displayName: 'Event Description', description: 'A longer, more detailed description of the event.', type: 'TEXT', isNullable: 0 },
         { name: 'LGCY_RFRNC_TXT', displayName: 'Legacy Reference Text', description: 'Optional ID from an external system.', type: 'TEXT', isNullable: 1 },
     ],
-};
+} as const;
 
 const METADATA_DSPLY_RL = {
     id: 7,
@@ -218,7 +241,7 @@ const METADATA_DSPLY_RL = {
         { name: 'RFC_5545_RCRRNC_RL_ID', displayName: 'Recurrence Rule ID', description: 'Foreign key to DM_RFC...ID.', type: 'INTEGER', isNullable: 0 },
         { name: 'MTCH_CNFG_TXT', displayName: 'Match Config Text', description: 'Specific date match, e.g., "11-12" for Nov 12th.', type: 'TEXT', isNullable: 0 },
     ],
-};
+} as const;
 
 const METADATA_DM_EVNT_CTGRY = {
     id: 8,
@@ -230,7 +253,7 @@ const METADATA_DM_EVNT_CTGRY = {
         { name: 'NM', displayName: 'Name', description: 'The name of the category (e.g., "Birthday").', type: 'TEXT', isNullable: 0 },
         { name: 'DSPLY_CNFG_ID', displayName: 'Display Config ID', description: 'Foreign key to DM_DSPLY_CNFG.ID.', type: 'INTEGER', isNullable: 0 },
     ],
-};
+} as const;
 
 const METADATA_OTPT_CNFG = {
     id: 9,
@@ -243,7 +266,7 @@ const METADATA_OTPT_CNFG = {
         { name: 'TRGT_TYP', displayName: 'Target Type', description: 'The type of output ("PRINT" or "ICS").', type: 'TEXT', isNullable: 0 },
         { name: 'CNFG_JSON', displayName: 'Configuration JSON', description: 'The JSON object with the export rules.', type: 'TEXT', isNullable: 0 },
     ],
-};
+} as const;
 
 const METADATA_GRP = {
     id: 10,
@@ -259,7 +282,7 @@ const METADATA_GRP = {
         { name: 'DFLT_PRINT_CNFG_ID', displayName: 'Default Print Config ID', description: 'Foreign key to OTPT_CNFG.ID for print.', type: 'INTEGER', isNullable: 1 },
         { name: 'DFLT_ICS_CNFG_ID', displayName: 'Default ICS Config ID', description: 'Foreign key to OTPT_CNFG.ID for ICS.', type: 'INTEGER', isNullable: 1 },
     ],
-};
+} as const;
 
 const METADATA_X_GRP_EVNT = {
     id: 11,
@@ -273,7 +296,7 @@ const METADATA_X_GRP_EVNT = {
         { name: 'SRT_ORDR_NUM', displayName: 'Sort Order Number', description: 'The sort order for the event within the group.', type: 'INTEGER', isNullable: 0 },
         { name: 'DSPLY_CNFG_ID', displayName: 'Display Config ID', description: 'Foreign key to DM_DSPLY_CNFG.ID.', type: 'INTEGER', isNullable: 1 },
     ],
-};
+} as const;
 
 const METADATA_X_GRP_GRP = {
     id: 12,
@@ -287,9 +310,9 @@ const METADATA_X_GRP_GRP = {
         { name: 'SRT_ORDR_NUM', displayName: 'Sort Order Number', description: 'The sort order for the child group within the parent.', type: 'INTEGER', isNullable: 0 },
         { name: 'DSPLY_CNFG_ID', displayName: 'Display Config ID', description: 'Foreign key to DM_DSPLY_CNFG.ID.', type: 'INTEGER', isNullable: 1 },
     ],
-};
+} as const;
 
-const ALL_TABLE_METADATA = [
+const ALL_TABLE_METADATA: TableMetadata[] = [
     METADATA_SYS_TABLES,
     METADATA_SYS_COLUMNS,
     METADATA_DM_RFC_5545_RCRRNC_RL,
@@ -305,13 +328,14 @@ const ALL_TABLE_METADATA = [
 ];
 
 export class StorageManager {
-  private db: initSqlJs.Database | null = null;
+  private db: Database | null = null;
+  private SQL: SqlJsStatic | null = null;
 
   async initializeDB(locateFile?: LocateFile): Promise<void> {
-    const SQL = await initSqlJs({
-      locateFile: locateFile || (file => `https://sql.js.org/dist/${file}`)
+    this.SQL = await initSqlJs({
+      locateFile: locateFile || ((file: string) => `https://sql.js.org/dist/${file}`)
     });
-    this.db = new SQL.Database();
+    this.db = new this.SQL.Database();
     this.db.exec(SCHEMA);
     this.populateMetadata();
   }
@@ -331,7 +355,7 @@ export class StorageManager {
         }
 
         // Check if the table has default entries to populate
-        if ('defaultEntries' in table && table.defaultEntries) {
+        if (table.defaultEntries) {
             const keys = Object.keys(table.defaultEntries[0]);
             const placeholders = keys.map(() => '?').join(',');
             const stmt = this.db.prepare(`INSERT INTO ${table.name} (${keys.join(',')}) VALUES (${placeholders})`);
