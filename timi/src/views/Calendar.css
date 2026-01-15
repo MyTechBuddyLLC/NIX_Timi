@@ -1,0 +1,81 @@
+/* src/views/Calendar.css */
+
+:root {
+  --base-slate: #1A1C1E;
+  --off-white: #F4F4F9;
+  --accent-blue: #3E5C76;
+  --accent-amber: #D97706;
+}
+
+/*-- General Calendar Container --*/
+.rbc-calendar {
+  background-color: var(--base-slate);
+  color: var(--off-white);
+  border: 1px solid var(--accent-blue);
+}
+
+/*-- Toolbar (Header with navigation) --*/
+.rbc-toolbar {
+  background-color: var(--accent-blue);
+  color: var(--off-white);
+  border-bottom: 2px solid var(--base-slate);
+  padding: 10px;
+}
+
+.rbc-toolbar .rbc-btn-group button {
+  background-color: var(--base-slate);
+  color: var(--off-white);
+  border: 1px solid var(--accent-blue);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.rbc-toolbar .rbc-btn-group button:hover,
+.rbc-toolbar .rbc-btn-group button:focus {
+  background-color: var(--accent-amber);
+  color: var(--base-slate);
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+  color: var(--off-white);
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+/*-- Calendar Grid Header (Days of the week) --*/
+.rbc-header {
+  background-color: var(--accent-blue);
+  color: var(--off-white);
+  border: 1px solid var(--base-slate);
+  padding: 8px;
+  font-weight: bold;
+}
+
+/*-- Calendar Cells (Days) --*/
+.rbc-day-bg {
+  border: 1px solid var(--accent-blue);
+}
+
+/*-- Today's Date --*/
+.rbc-today {
+  background-color: #2a2d30; /* A slightly lighter slate for today */
+}
+
+/*-- Event Styling --*/
+.rbc-event {
+  background-color: var(--accent-blue);
+  color: var(--off-white);
+  border: 1px solid var(--accent-amber);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+.rbc-event:focus {
+  outline: 1px solid var(--accent-amber);
+}
+
+/*-- "Show More" Button --*/
+.rbc-show-more {
+  background-color: var(--accent-amber);
+  color: var(--base-slate);
+  font-weight: bold;
+}
