@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import './AppLayout.css';
 import CalendarView from './views/CalendarView';
+import EventsView from './views/EventsView';
 import GroupsView from './views/GroupsView';
 import SettingsView from './views/SettingsView';
 import { useVersionCheck } from './hooks/useVersionCheck';
 
-type View = 'calendar' | 'groups' | 'settings';
+type View = 'calendar' | 'events' | 'groups' | 'settings';
 
 const UpdateNotification: React.FC = () => (
   <div className="updateNotification">
@@ -28,6 +29,13 @@ const NavLinks: React.FC<NavLinksProps> = ({ currentView, setCurrentView }) => (
       onClick={() => setCurrentView('calendar')}
     >
       Calendar
+    </a>
+    <a
+      href="#events"
+      className={`navItem ${currentView === 'events' ? 'active' : ''}`}
+      onClick={() => setCurrentView('events')}
+    >
+      Events
     </a>
     <a
       href="#groups"
@@ -53,13 +61,15 @@ const AppLayout: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'calendar':
-        return <CalendarView />;
+        return <CalendarView setCurrentView={setCurrentView} />;
+      case 'events':
+        return <EventsView />;
       case 'groups':
         return <GroupsView />;
       case 'settings':
         return <SettingsView />;
       default:
-        return <CalendarView />;
+        return <CalendarView setCurrentView={setCurrentView} />;
     }
   };
 
