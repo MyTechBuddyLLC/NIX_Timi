@@ -19,6 +19,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  position: relative; /* Ensure proper stacking context for sticky header */
 }
 
 .contentWrapper {
@@ -96,6 +97,16 @@ body {
   text-align: center;
   padding: 0.75rem;
   font-weight: 500;
+  position: absolute; /* Changed to absolute positioning */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+/* When the update is visible, add padding to the top of the content wrapper */
+.appLayout.update-visible .contentWrapper {
+  padding-top: 3.5rem; /* Adjust this value to match the notification height */
 }
 
 .updateNotification button {
