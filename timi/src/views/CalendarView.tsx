@@ -1,11 +1,12 @@
 // src/views/CalendarView.tsx
 import React from 'react';
-import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import startOfWeek from 'date-fns/startOfWeek';
-import getDay from 'date-fns/getDay';
-import enUS from 'date-fns/locale/en-US';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import type { Event } from 'react-big-calendar';
+import { format } from 'date-fns/format';
+import { parse } from 'date-fns/parse';
+import { startOfWeek } from 'date-fns/startOfWeek';
+import { getDay } from 'date-fns/getDay';
+import { enUS } from 'date-fns/locale/en-US';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
 
@@ -21,22 +22,22 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-// Mock event data
+// Mock event data for January 2026
 const mockEvents = [
   {
     title: 'Project Kickoff',
-    start: new Date(2024, 6, 10, 10, 0, 0), // Note: Month is 0-indexed (6 = July)
-    end: new Date(2024, 6, 10, 12, 0, 0),
+    start: new Date(2026, 0, 12, 10, 0, 0), // Month is 0-indexed (0 = January)
+    end: new Date(2026, 0, 12, 12, 0, 0),
   },
   {
     title: 'Design Review',
-    start: new Date(2024, 6, 15, 14, 0, 0),
-    end: new Date(2024, 6, 15, 15, 30, 0),
+    start: new Date(2026, 0, 15, 14, 0, 0),
+    end: new Date(2026, 0, 15, 15, 30, 0),
   },
   {
     title: 'Development Sprint End',
-    start: new Date(2024, 6, 25),
-    end: new Date(2024, 6, 25),
+    start: new Date(2026, 0, 29),
+    end: new Date(2026, 0, 29),
     allDay: true,
   },
 ];
@@ -49,7 +50,7 @@ interface CalendarViewProps {
 }
 
 const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView }) => {
-  const handleSelectEvent = (event: object) => {
+  const handleSelectEvent = (event: Event) => {
     console.log('Event selected:', event); // For debugging
     setCurrentView('events');
   };
