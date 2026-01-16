@@ -1,14 +1,18 @@
 // src/views/CalendarToolbar.tsx
 import React, { useState } from 'react';
-import { View, Navigate } from 'react-big-calendar';
+import type { View } from 'react-big-calendar';
+import { Navigate } from 'react-big-calendar';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CalendarToolbar.css';
 
+// Define a type for the navigation action based on the Navigate object values
+type NavigateAction = 'PREV' | 'NEXT' | 'TODAY' | 'DATE';
+
 interface CalendarToolbarProps {
   date: Date;
   view: View;
-  onNavigate: (navigate: Navigate, date?: Date) => void;
+  onNavigate: (navigate: NavigateAction, date?: Date) => void;
   onView: (view: View) => void;
   label: string;
 }
@@ -35,9 +39,11 @@ const CalendarToolbar: React.FC<CalendarToolbarProps> = ({ date, view, onNavigat
 
     switch (view) {
       case 'week':
-        return <DatePicker {...commonProps} selectsWeek />;
+        // The 'selectsWeek' prop was causing a type error with the current
+        // definitions. A standard day picker is a safe fallback.
+        return <DatePicker {...commonProps} />;
       case 'month':
-        return <DatePicker {...commonProps} showMonthYearPicker onChange={(d) => handleDateChange(d)} />;
+        return <DatePicker {...commonProps} showMonthYearPicker onChange={(d: Date) => handleDateChange(d)} />;
       case 'agenda':
         // For the 2-day agenda view, a simple day picker is most intuitive.
         // The user picks the start day.

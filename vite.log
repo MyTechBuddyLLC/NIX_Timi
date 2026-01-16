@@ -8,3 +8,8 @@
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
 2:43:02 AM [vite] (client) hmr update /src/views/CalendarView.tsx
+5:17:45 PM [vite] (client) hmr update /src/views/CalendarView.tsx
+5:18:20 PM [vite] (client) hmr update /src/views/CalendarView.tsx
+5:18:33 PM [vite] (client) hmr update /src/views/CalendarToolbar.tsx
+5:19:37 PM [vite] (client) hmr update /src/views/CalendarToolbar.tsx
+5:21:13 PM [vite] (client) hmr update /src/views/CalendarView.tsx
