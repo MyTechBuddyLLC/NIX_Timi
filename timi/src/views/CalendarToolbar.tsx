@@ -43,7 +43,7 @@ const CalendarToolbar: React.FC<CalendarToolbarProps> = ({ date, view, onNavigat
         // definitions. A standard day picker is a safe fallback.
         return <DatePicker {...commonProps} />;
       case 'month':
-        return <DatePicker {...commonProps} showMonthYearPicker onChange={(d: Date) => handleDateChange(d)} />;
+        return <DatePicker {...commonProps} showMonthYearPicker onChange={(d: Date | null) => handleDateChange(d)} />;
       case 'agenda':
         // For the 2-day agenda view, a simple day picker is most intuitive.
         // The user picks the start day.
