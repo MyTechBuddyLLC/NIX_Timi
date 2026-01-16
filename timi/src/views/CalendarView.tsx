@@ -1,6 +1,7 @@
 // src/views/CalendarView.tsx
-import React from 'react';
-import { Calendar, dateFnsLocalizer, Event } from 'react-big-calendar';
+import React, { useState } from 'react';
+import { Calendar, dateFnsLocalizer, Event, View as CalendarViewType } from 'react-big-calendar';
+import CalendarToolbar from './CalendarToolbar'; // Import the custom toolbar
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
@@ -49,6 +50,9 @@ interface CalendarViewProps {
 }
 
 const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView }) => {
+  const [date, setDate] = useState(new Date());
+  const [view, setView] = useState<CalendarViewType>('month');
+
   const handleSelectEvent = (event: object) => {
     console.log('Event selected:', event); // For debugging
     setCurrentView('events');
@@ -62,9 +66,16 @@ const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView }) => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: '100%' }}
-        views={['month']}
-        defaultView="month"
+        views={['day', 'week', 'month', 'agenda']}
+        view={view}
+        date={date}
+        onView={setView}
+        onNavigate={setDate}
         onSelectEvent={handleSelectEvent}
+        components={{
+          toolbar: CalendarToolbar,
+        }}
+        length={view === 'agenda' ? 2 : 30}
       />
     </div>
   );
