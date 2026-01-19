@@ -1,5 +1,6 @@
 // src/AppLayout.tsx
 import React, { useState } from 'react';
+import type { Event } from 'react-big-calendar';
 import './AppLayout.css';
 import CalendarView from './views/CalendarView';
 import EventsView from './views/EventsView';
@@ -56,20 +57,35 @@ const NavLinks: React.FC<NavLinksProps> = ({ currentView, setCurrentView }) => (
 
 const AppLayout: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('calendar');
+  const [editingEvent, setEditingEvent] = useState<Event | null | undefined>(undefined);
   const { isUpdateAvailable } = useVersionCheck();
+
+  const handleSetCurrentView = (view: View) => {
+    setEditingEvent(undefined); // Clear editing state when changing main views
+    setCurrentView(view);
+  };
+
+  const handleEditEvent = (event: Event | null) => {
+    setEditingEvent(event);
+    setCurrentView('events'); // Switch to events view to show the form
+  };
+
+  const handleCancelEdit = () => {
+    setEditingEvent(undefined);
+  };
 
   const renderView = () => {
     switch (currentView) {
       case 'calendar':
-        return <CalendarView setCurrentView={setCurrentView} />;
+        return <CalendarView setCurrentView={handleSetCurrentView} onEditEvent={handleEditEvent} />;
       case 'events':
-        return <EventsView />;
+        return <EventsView editingEvent={editingEvent} onEditEvent={handleEditEvent} onCancel={handleCancelEdit} />;
       case 'groups':
         return <GroupsView />;
       case 'settings':
         return <SettingsView />;
       default:
-        return <CalendarView setCurrentView={setCurrentView} />;
+        return <CalendarView setCurrentView={handleSetCurrentView} onEditEvent={handleEditEvent} />;
     }
   };
 

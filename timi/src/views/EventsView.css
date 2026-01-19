@@ -1,0 +1,56 @@
+/* src/views/EventsView.css */
+.events-view-container {
+  padding: 20px;
+}
+
+.events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.events-header h1 {
+  color: #1A1C1E; /* Deep Slate */
+}
+
+.new-event-btn {
+  background-color: #3e5c76; /* Forge Blue */
+  color: #F4F4F9; /* Off-White */
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.events-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.events-list li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: box-shadow 0.2s;
+}
+
+.events-list li:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.event-title {
+  font-weight: bold;
+}
+
+.event-date {
+  color: #666;
+}
