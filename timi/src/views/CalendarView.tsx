@@ -23,17 +23,19 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-// Mock event data
+// Mock event data for all-day events
 const mockEvents = [
   {
     title: 'Project Kickoff',
-    start: new Date(2024, 6, 10, 10, 0, 0), // Note: Month is 0-indexed (6 = July)
-    end: new Date(2024, 6, 10, 12, 0, 0),
+    start: new Date(2024, 6, 10),
+    end: new Date(2024, 6, 10),
+    allDay: true,
   },
   {
     title: 'Design Review',
-    start: new Date(2024, 6, 15, 14, 0, 0),
-    end: new Date(2024, 6, 15, 15, 30, 0),
+    start: new Date(2024, 6, 15),
+    end: new Date(2024, 6, 15),
+    allDay: true,
   },
   {
     title: 'Development Sprint End',
@@ -48,15 +50,15 @@ type View = 'calendar' | 'events' | 'groups' | 'settings';
 
 interface CalendarViewProps {
   setCurrentView: (view: View) => void;
+  onEditEvent: (event: Event | null) => void;
 }
 
-const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView }) => {
+const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView, onEditEvent }) => {
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState<CalendarViewType>('month');
 
   const handleSelectEvent = (event: Event) => {
-    console.log('Event selected:', event); // For debugging
-    setCurrentView('events');
+    onEditEvent(event);
   };
 
   return (
@@ -77,6 +79,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView }) => {
           toolbar: CalendarToolbar,
         }}
         length={view === 'agenda' ? 2 : 30}
+        formats={{
+          timeGutterFormat: () => null, // Hides the time gutter
+        }}
       />
     </div>
   );
