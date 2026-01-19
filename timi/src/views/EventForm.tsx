@@ -18,7 +18,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onCancel }) => {
           <input
             type="text"
             id="displayText"
-            defaultValue={event?.title || ''}
+            defaultValue={String(event?.title || '')}
           />
         </div>
         <div className="form-group">
