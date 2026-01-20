@@ -46,8 +46,6 @@ const mockEvents = [
 ];
 
 
-type View = 'calendar' | 'events' | 'groups' | 'settings';
-
 interface CalendarViewProps {
   onEditEvent: (event: Event | null) => void;
 }

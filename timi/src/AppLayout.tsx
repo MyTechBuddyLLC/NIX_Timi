@@ -77,7 +77,7 @@ const AppLayout: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'calendar':
-        return <CalendarView setCurrentView={handleSetCurrentView} onEditEvent={handleEditEvent} />;
+        return <CalendarView onEditEvent={handleEditEvent} />;
       case 'events':
         return <EventsView editingEvent={editingEvent} onEditEvent={handleEditEvent} onCancel={handleCancelEdit} />;
       case 'groups':
@@ -85,7 +85,7 @@ const AppLayout: React.FC = () => {
       case 'settings':
         return <SettingsView />;
       default:
-        return <CalendarView setCurrentView={handleSetCurrentView} onEditEvent={handleEditEvent} />;
+        return <CalendarView onEditEvent={handleEditEvent} />;
     }
   };
 
