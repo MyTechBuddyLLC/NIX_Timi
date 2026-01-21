@@ -60,7 +60,7 @@ const AppLayout: React.FC = () => {
   const [editingEvent, setEditingEvent] = useState<Event | null | undefined>(undefined);
   const { isUpdateAvailable } = useVersionCheck();
 
-  const handleSetCurrentView = (view: View) => {
+  const handleNavClick = (view: View) => {
     setEditingEvent(undefined); // Clear editing state when changing main views
     setCurrentView(view);
   };
@@ -77,7 +77,7 @@ const AppLayout: React.FC = () => {
   const renderView = () => {
     switch (currentView) {
       case 'calendar':
-        return <CalendarView setCurrentView={handleSetCurrentView} onEditEvent={handleEditEvent} />;
+        return <CalendarView onEditEvent={handleEditEvent} />;
       case 'events':
         return <EventsView editingEvent={editingEvent} onEditEvent={handleEditEvent} onCancel={handleCancelEdit} />;
       case 'groups':
@@ -85,7 +85,7 @@ const AppLayout: React.FC = () => {
       case 'settings':
         return <SettingsView />;
       default:
-        return <CalendarView setCurrentView={handleSetCurrentView} onEditEvent={handleEditEvent} />;
+        return <CalendarView onEditEvent={handleEditEvent} />;
     }
   };
 
@@ -96,7 +96,7 @@ const AppLayout: React.FC = () => {
       <div className="contentWrapper">
         {/* Sidebar for Desktop */}
         <nav className="sidebar">
-          <NavLinks currentView={currentView} setCurrentView={setCurrentView} />
+          <NavLinks currentView={currentView} setCurrentView={handleNavClick} />
         </nav>
 
         {/* Main Content Area */}
@@ -107,7 +107,7 @@ const AppLayout: React.FC = () => {
 
       {/* Bottom Navigation for Mobile */}
       <nav className="bottomNav">
-        <NavLinks currentView={currentView} setCurrentView={setCurrentView} />
+        <NavLinks currentView={currentView} setCurrentView={handleNavClick} />
       </nav>
     </div>
   );

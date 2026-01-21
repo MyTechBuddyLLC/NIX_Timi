@@ -46,14 +46,11 @@ const mockEvents = [
 ];
 
 
-type View = 'calendar' | 'events' | 'groups' | 'settings';
-
 interface CalendarViewProps {
-  setCurrentView: (view: View) => void;
   onEditEvent: (event: Event | null) => void;
 }
 
-const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView, onEditEvent }) => {
+const CalendarView: React.FC<CalendarViewProps> = ({ onEditEvent }) => {
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState<CalendarViewType>('month');
 
@@ -80,7 +77,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({ setCurrentView, onEditEvent
         }}
         length={view === 'agenda' ? 2 : 30}
         formats={{
-          timeGutterFormat: () => null, // Hides the time gutter
+          timeGutterFormat: () => '', // Hides the time gutter by returning an empty string
         }}
       />
     </div>

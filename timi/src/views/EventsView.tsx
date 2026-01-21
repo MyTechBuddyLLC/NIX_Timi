@@ -12,7 +12,7 @@ const mockEvents = [
 ];
 
 interface EventsViewProps {
-  editingEvent: Event | null;
+  editingEvent: Event | null | undefined;
   onEditEvent: (event: Event | null) => void;
   onCancel: () => void;
 }
