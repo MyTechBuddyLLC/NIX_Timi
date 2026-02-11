@@ -1,7 +1,8 @@
 // src/AppLayout.tsx
 import React, { useState } from 'react';
-import type { Event } from 'react-big-calendar';
+import type { Event, View as CalendarViewType } from 'react-big-calendar';
 import './AppLayout.css';
+import { initialMockEvents } from './mockData';
 import CalendarView from './views/CalendarView';
 import EventsView from './views/EventsView';
 import GroupsView from './views/GroupsView';
@@ -58,6 +59,10 @@ const NavLinks: React.FC<NavLinksProps> = ({ currentView, setCurrentView }) => (
 const AppLayout: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('calendar');
   const [editingEvent, setEditingEvent] = useState<Event | null | undefined>(undefined);
+  const [calendarView, setCalendarView] = useState<CalendarViewType>('month');
+  const [calendarDate, setCalendarDate] = useState(new Date());
+  const [events, setEvents] = useState<Event[]>(initialMockEvents);
+
   const { isUpdateAvailable } = useVersionCheck();
 
   const handleNavClick = (view: View) => {
@@ -74,18 +79,60 @@ const AppLayout: React.FC = () => {
     setEditingEvent(undefined);
   };
 
+  const handleSaveEvent = (savedEvent: Event) => {
+    setEvents((prevEvents) => {
+      // If we're editing an existing event (we'll check by reference for now as we don't have IDs yet)
+      const index = prevEvents.findIndex((e) => e === editingEvent);
+      if (index > -1) {
+        const newEvents = [...prevEvents];
+        newEvents[index] = savedEvent;
+        return newEvents;
+      } else {
+        // Adding a new event
+        return [...prevEvents, savedEvent];
+      }
+    });
+    setEditingEvent(undefined);
+  };
+
   const renderView = () => {
     switch (currentView) {
       case 'calendar':
-        return <CalendarView onEditEvent={handleEditEvent} />;
+        return (
+          <CalendarView
+            events={events}
+            onEditEvent={handleEditEvent}
+            view={calendarView}
+            onViewChange={setCalendarView}
+            date={calendarDate}
+            onDateChange={setCalendarDate}
+          />
+        );
       case 'events':
-        return <EventsView editingEvent={editingEvent} onEditEvent={handleEditEvent} onCancel={handleCancelEdit} />;
+        return (
+          <EventsView
+            events={events}
+            editingEvent={editingEvent}
+            onEditEvent={handleEditEvent}
+            onCancel={handleCancelEdit}
+            onSave={handleSaveEvent}
+          />
+        );
       case 'groups':
         return <GroupsView />;
       case 'settings':
         return <SettingsView />;
       default:
-        return <CalendarView onEditEvent={handleEditEvent} />;
+        return (
+          <CalendarView
+            events={events}
+            onEditEvent={handleEditEvent}
+            view={calendarView}
+            onViewChange={setCalendarView}
+            date={calendarDate}
+            onDateChange={setCalendarDate}
+          />
+        );
     }
   };
 
