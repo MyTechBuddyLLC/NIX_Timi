@@ -64,6 +64,8 @@ body {
   display: none;
 }
 
+/* Add a subtle texture or pattern to the background could be nice, but let's stick to colors first */
+
 /* Desktop Styles: Media query for larger screens */
 @media (min-width: 768px) {
   .appLayout {
@@ -79,14 +81,28 @@ body {
   .sidebar {
     display: flex;
     flex-direction: column;
-    width: 250px;
-    background-color: var(--accent-blue);
-    padding: 1rem;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    width: 240px;
+    background-color: var(--base-slate); /* Darker sidebar */
+    padding: 2rem 1rem;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    border-right: 1px solid var(--accent-blue);
+    z-index: 5;
   }
 
   .sidebar .navItem {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
+  }
+
+  .sidebar .navItem.active {
+    background-color: var(--accent-blue);
+    color: var(--accent-amber);
+    border-color: var(--accent-amber);
+    box-shadow: 0 0 10px rgba(217, 119, 6, 0.2);
   }
 }
 

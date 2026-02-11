@@ -23,37 +23,23 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-// Mock event data for all-day events
-const mockEvents = [
-  {
-    title: 'Project Kickoff',
-    start: new Date(2024, 6, 10),
-    end: new Date(2024, 6, 10),
-    allDay: true,
-  },
-  {
-    title: 'Design Review',
-    start: new Date(2024, 6, 15),
-    end: new Date(2024, 6, 15),
-    allDay: true,
-  },
-  {
-    title: 'Development Sprint End',
-    start: new Date(2024, 6, 25),
-    end: new Date(2024, 6, 25),
-    allDay: true,
-  },
-];
-
-
 interface CalendarViewProps {
+  events: Event[];
   onEditEvent: (event: Event | null) => void;
+  view: CalendarViewType;
+  onViewChange: (view: CalendarViewType) => void;
+  date: Date;
+  onDateChange: (date: Date) => void;
 }
 
-const CalendarView: React.FC<CalendarViewProps> = ({ onEditEvent }) => {
-  const [date, setDate] = useState(new Date());
-  const [view, setView] = useState<CalendarViewType>('month');
-
+const CalendarView: React.FC<CalendarViewProps> = ({
+  events,
+  onEditEvent,
+  view,
+  onViewChange,
+  date,
+  onDateChange,
+}) => {
   const handleSelectEvent = (event: Event) => {
     onEditEvent(event);
   };
@@ -62,15 +48,15 @@ const CalendarView: React.FC<CalendarViewProps> = ({ onEditEvent }) => {
     <div style={{ height: 'calc(100vh - 100px)' }}>
       <Calendar
         localizer={localizer}
-        events={mockEvents}
+        events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: '100%' }}
         views={['day', 'week', 'month', 'agenda']}
         view={view}
         date={date}
-        onView={setView}
-        onNavigate={setDate}
+        onView={onViewChange}
+        onNavigate={onDateChange}
         onSelectEvent={handleSelectEvent}
         components={{
           toolbar: CalendarToolbar,
