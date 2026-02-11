@@ -29,7 +29,7 @@ const EventsView: React.FC<EventsViewProps> = ({ events, editingEvent, onEditEve
         {events.map((event, index) => (
           <li key={index} onClick={() => onEditEvent(event)}>
             <div className="event-title">{event.title}</div>
-            <div className="event-date">{event.start.toLocaleDateString()}</div>
+            <div className="event-date">{event.start ? new Date(event.start).toLocaleDateString() : 'No date'}</div>
           </li>
         ))}
       </ul>

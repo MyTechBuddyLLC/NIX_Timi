@@ -1,5 +1,5 @@
 // src/views/CalendarView.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import type { Event, View as CalendarViewType } from 'react-big-calendar';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import CalendarToolbar from './CalendarToolbar'; // Import the custom toolbar

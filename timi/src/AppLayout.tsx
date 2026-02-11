@@ -123,7 +123,16 @@ const AppLayout: React.FC = () => {
       case 'settings':
         return <SettingsView />;
       default:
-        return <CalendarView onEditEvent={handleEditEvent} />;
+        return (
+          <CalendarView
+            events={events}
+            onEditEvent={handleEditEvent}
+            view={calendarView}
+            onViewChange={setCalendarView}
+            date={calendarDate}
+            onDateChange={setCalendarDate}
+          />
+        );
     }
   };
 
