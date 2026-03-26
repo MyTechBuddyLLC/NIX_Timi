@@ -1,66 +1,95 @@
 /* src/views/EventsView.css */
 .events-view-container {
-  padding: 20px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .events-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .events-header h1 {
-  color: var(--accent-amber);
+  color: var(--accent-primary); /* Nordic Frost */
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
+  font-size: 2rem;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(8, 216, 228, 0.4);
 }
 
 .new-event-btn {
-  background-color: var(--accent-amber);
-  color: var(--base-slate);
+  background-color: var(--accent-primary);
+  color: var(--bg-color-main);
   border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 15px rgba(8, 216, 228, 0.2);
 }
 
 .new-event-btn:hover {
-  background-color: #f59e0b;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.4);
+  background-color: var(--nyx-electric-aurora);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(8, 216, 228, 0.4);
 }
 
 .events-list {
   list-style-type: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
 }
 
 .events-list li {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 15px;
-  margin-bottom: 10px;
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  transition: box-shadow 0.2s;
+  transition: all 0.25s ease;
+  min-height: 100px;
 }
 
 .events-list li:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-color: rgba(8, 216, 228, 0.4);
+  background-color: rgba(0, 59, 74, 0.4); /* Deep Fjord on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .event-title {
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  margin-bottom: 8px;
 }
 
 .event-date {
-  color: #666;
+  color: var(--accent-secondary); /* Mjölnir Gold */
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.event-date::before {
+  content: '•';
+  margin-right: 6px;
+  color: var(--accent-primary);
 }

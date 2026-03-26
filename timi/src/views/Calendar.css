@@ -1,81 +1,125 @@
 /* src/views/Calendar.css */
 
-:root {
-  --base-slate: #1A1C1E;
-  --off-white: #F4F4F9;
-  --accent-blue: #3E5C76;
-  --accent-amber: #D97706;
-}
-
 /*-- General Calendar Container --*/
 .rbc-calendar {
-  background-color: var(--base-slate);
-  color: var(--off-white);
-  border: 1px solid var(--accent-blue);
-}
-
-/*-- Toolbar (Header with navigation) --*/
-.rbc-toolbar {
-  background-color: var(--accent-blue);
-  color: var(--off-white);
-  border-bottom: 2px solid var(--base-slate);
-  padding: 10px;
-}
-
-.rbc-toolbar .rbc-btn-group button {
-  background-color: var(--base-slate);
-  color: var(--off-white);
-  border: 1px solid var(--accent-blue);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.rbc-toolbar .rbc-btn-group button:hover,
-.rbc-toolbar .rbc-btn-group button:focus {
-  background-color: var(--accent-amber);
-  color: var(--base-slate);
-}
-
-.rbc-toolbar .rbc-toolbar-label {
-  color: var(--off-white);
-  font-size: 1.5em;
-  font-weight: bold;
+  background-color: var(--surface-color);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 /*-- Calendar Grid Header (Days of the week) --*/
 .rbc-header {
-  background-color: var(--accent-blue);
-  color: var(--off-white);
-  border: 1px solid var(--base-slate);
-  padding: 8px;
-  font-weight: bold;
+  background-color: rgba(0, 59, 74, 0.4); /* Deep Fjord with opacity */
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+}
+
+.rbc-header + .rbc-header {
+  border-left: 1px solid var(--border-color);
 }
 
 /*-- Calendar Cells (Days) --*/
+.rbc-month-view {
+  border: none;
+}
+
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid var(--border-color);
+}
+
 .rbc-day-bg {
-  border: 1px solid var(--accent-blue);
+  border-left: 1px solid var(--border-color);
+  transition: background-color 0.2s;
+}
+
+.rbc-day-bg:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/*-- Date Numbers --*/
+.rbc-date-cell {
+  padding: 8px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.rbc-off-range-bg {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 /*-- Today's Date --*/
 .rbc-today {
-  background-color: #2a2d30; /* A slightly lighter slate for today */
+  background-color: rgba(8, 216, 228, 0.05); /* Nordic Frost very sheer */
+}
+
+.rbc-today .rbc-date-cell {
+  color: var(--accent-primary);
+  font-weight: bold;
 }
 
 /*-- Event Styling --*/
 .rbc-event {
-  background-color: var(--accent-blue);
-  color: var(--off-white);
-  border: 1px solid var(--accent-amber);
-  border-radius: 4px;
-  padding: 2px 5px;
+  background-color: rgba(0, 59, 74, 0.8); /* Deep Fjord */
+  color: var(--text-main);
+  border: 1px solid var(--accent-primary); /* Nordic Frost border */
+  border-radius: 6px;
+  padding: 3px 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.rbc-event:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(8, 216, 228, 0.2);
+  z-index: 10;
 }
 
 .rbc-event:focus {
-  outline: 1px solid var(--accent-amber);
+  outline: none;
+}
+
+.rbc-event-content {
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 /*-- "Show More" Button --*/
 .rbc-show-more {
-  background-color: var(--accent-amber);
-  color: var(--base-slate);
-  font-weight: bold;
+  color: var(--accent-secondary); /* Mjölnir Gold */
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+/*-- Time Grid overrides (Week/Day view) --*/
+.rbc-time-view {
+  border: none;
+}
+
+.rbc-time-header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.rbc-time-content {
+  border-top: none;
+}
+
+.rbc-timeslot-group {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.rbc-day-slot .rbc-time-slot {
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.rbc-time-header-content {
+  border-left: 1px solid var(--border-color);
 }
