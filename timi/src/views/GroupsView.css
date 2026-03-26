@@ -1,0 +1,121 @@
+/* src/views/GroupsView.css */
+
+.groups-view-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.groups-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.groups-header h1 {
+  color: var(--accent-secondary); /* Mjölnir Gold */
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 2rem;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+.new-group-btn {
+  background-color: var(--accent-secondary);
+  color: var(--bg-color-main);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.new-group-btn:hover {
+  background-color: var(--nyx-magma-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.group-card {
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.group-card:hover {
+  border-color: rgba(212, 175, 55, 0.5); /* Mjölnir Gold hover */
+  background-color: rgba(74, 14, 0, 0.3); /* Sheer Iron Wood */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* A glowing strip at the top of the card */
+.group-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: var(--accent-secondary);
+  box-shadow: 0 0 8px var(--accent-secondary);
+}
+
+.group-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.group-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+/* Group Action buttons inside the card */
+.group-actions {
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 16px;
+}
+
+.group-actions button {
+  flex: 1;
+  padding: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+.group-actions button:hover {
+  background-color: rgba(212, 175, 55, 0.15);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
